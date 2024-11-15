@@ -1,0 +1,20 @@
+<div class="sidebar-container">
+<aside class="sidebar">
+  <!-- <h2 class="sidebar__heading">Products</h2> -->
+  <ul class="sidebar__list">
+    {% for product in collections.all.products limit: 10 %}
+      <li class="sidebar__list-item">
+        <a href="{{ product.url }}" class="sidebar__link">{{ product.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+    <ul class="sidebar__list upper_br">
+      <li><a href="#" class="sidebar__link2">Good For  +</a></li>
+      <li><a href="#" class="sidebar__link2">Scent  +</a></li>
+      <li><a href="#" class="sidebar__link2">Ingredients  +</a></li>
+      <li><a href="#" class="sidebar__link2">Note  +</a></li>
+      <li><a href="#" class="sidebar__link">Sorter etter  <span class="sidebar__span">+</span></a></li>
+    </ul>
+  
+</aside>
+</div>

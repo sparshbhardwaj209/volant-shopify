@@ -1,0 +1,181 @@
+{% comment %} {% schema %}
+  {
+    "name": "Section name",
+    "settings": []
+  }
+{% endschema %} {% endcomment %}
+
+<div class="collection-container">
+
+  <!-- Filter and Sorting Options -->
+<div class="filter-sort">
+  <label for="sort-by">Sort by:</label>
+  <select id="sort-by" onchange="location.href = this.value;">
+    <option value="{{ collection.url }}">Select</option>
+    <option value="{{ collection.url }}?sort_by=price-ascending" 
+      {% if collection.sort_by == 'price-ascending' %}selected{% endif %}>
+      Price, low to high
+    </option>
+    <option value="{{ collection.url }}?sort_by=price-descending" 
+      {% if collection.sort_by == 'price-descending' %}selected{% endif %}>
+      Price, high to low
+    </option>
+  </select>
+</div>
+
+
+
+  <!-- Product Grid -->
+<div class="product-grid">
+  {% for product in collection.products %}
+    <div class="product-card {% if forloop.first %}product-card--featured{% endif %}">
+      <a href="{{ product.url }}">
+        <img 
+          src="{{ product.featured_image | img_url: '600x600' }}" 
+          alt="{{ product.title }}" 
+          width="{% if forloop.first %}650{% else %}600{% endif %}" 
+          height="{% if forloop.first %}650{% else %}600{% endif %}">
+      </a>
+      <h3 class="product_name">{{ product.title }}</h3>
+       <!-- Conditional Extra Information for the First Product -->
+      {% if forloop.first %}
+        <div class="extra-info">
+          <!-- Example: Star Rating -->
+          <div class="product-review">
+            ⭐⭐⭐⭐⭐ (3,587)
+          </div>
+          <!-- Example: Additional Information -->
+          <!-- <p class="product-description">This is a special product with exclusive features!</p> -->
+        </div>
+      {% endif %}
+      <!-- <p class="product-price">{{ product.price | money }}</p> -->
+      <div class="product-price" id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+        {%- render 'price',
+          product: product,
+          use_variant: true,
+          placeholder: placeholder,
+          price_class: 'price--large'
+        -%}
+      </div>
+      
+      <!-- Add to Cart Button -->
+      <form action="/cart/add" method="post">
+        <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+        <button type="submit" class="btn">LEGG TIL +</button>
+      </form>
+
+      <p class="lesmer">LES MER</p>
+      {% if forloop.first %}
+        <div class="extra-info">
+          <!-- Example: Additional Information -->
+          <p class="product-description">8 farger tilgjengeliq</p>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>
+
+
+<style>
+  /* Styling for collection layout */
+  .collection-container {
+    padding: 20px;
+  }
+  .filter-sort {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+    /* margin-left: 180px; */
+    padding: 10px;
+  }
+  #sort-by{
+    padding: 3px 10px;
+    border: 1px solid #bfbfbf;
+    border-radius: 12px;
+    margin-left: 5px;
+    font: 14px
+  }
+  /* .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  .product-card {
+    width: calc(25% - 20px); 
+    box-sizing: border-box;
+  } */
+
+  .product-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 items per row */
+  gap: 25px; /* Adjust spacing between items as needed */
+  justify-items: center; /* Center items horizontally */
+    justify-content: center;
+    align-items: end;
+    margin: 0 auto;
+  }
+  
+  .product-card {
+    /* width: 100%; /* Ensure each card fills its grid column */ */
+    box-sizing: border-box;
+  }
+  @media (max-width: 1199px) {
+  .product-grid > * {
+    flex: 0 0 calc(33.33% - 20px);
+  }
+}
+
+@media (max-width: 767px) {
+  .product-grid > * {
+    flex: 0 0 calc(50% - 20px);
+  }
+}
+  .product-card {
+    width: 200px;
+    text-align: center;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: auto;
+  }
+  .product_name{
+    margin: 0px;
+  }
+  .product-price{
+    margin: 2px 0px;
+    margin-bottom: 10px;
+  }
+
+  .product-description{
+    margin: 0;
+  }
+  
+  .btn {
+    background-color: #a48b87;
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .lesmer{
+    color: black;
+    font-size: 16px;
+    text-decoration-line: underline;
+    padding: 2px 0px;
+    margin: 0px;
+  }
+
+  
+</style>
+
+{% schema %}
+{
+  "name": "Custom Collection",
+  "settings": []
+}
+{% endschema %}
